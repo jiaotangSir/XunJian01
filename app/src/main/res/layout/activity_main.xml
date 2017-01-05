@@ -6,36 +6,24 @@
     android:layout_height="match_parent"
     tools:context="com.jiaotang.xunjian01.MainActivity">
 
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/menu_line" />
 
-    <Button
-        android:text="@string/button_mission"
-        android:layout_width="wrap_content"
+    <View
+        android:id="@+id/menu_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_above="@+id/tab_main"
+        android:background="@color/between_line"
+        />
+    <include
+        android:id="@+id/tab_main"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="87dp"
-        android:id="@+id/button_mission"
-        android:textSize="30sp" />
-
-    <Button
-        android:text="@string/button_map"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/button_mission"
-        android:layout_alignStart="@+id/button_mission"
-        android:id="@+id/button_map"
-        android:textSize="30sp" />
-
-    <Button
-        android:text="@string/button_record"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button_map"
-        android:layout_alignRight="@+id/button_map"
-        android:layout_alignEnd="@+id/button_map"
-        android:layout_marginTop="75dp"
-        android:id="@+id/button_record"
-        android:textSize="30sp" />
+        android:layout_alignParentBottom="true"
+        layout="@layout/tab_bottom" />
 
 </RelativeLayout>

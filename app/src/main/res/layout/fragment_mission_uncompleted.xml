@@ -5,9 +5,15 @@
     tools:context="com.jiaotang.xunjian01.mission.MissionUncompletedFragment">
 
     <!-- TODO: Update blank fragment layout -->
-
+    <com.jiaotang.xunjian01.util.RefreshLayout
+        android:id="@+id/swipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/listView_uncompleted" />
+        android:id="@+id/listView_uncompleted">
+    </ListView>
+
+    </com.jiaotang.xunjian01.util.RefreshLayout>
 </FrameLayout>

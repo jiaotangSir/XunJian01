@@ -1,0 +1,120 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.jiaotang.xunjian01.fragment.HomeFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <TextView
+        android:text="首页"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/textView23"
+        android:textAlignment="center"
+        android:layout_centerInParent="false"
+        android:layout_centerVertical="false"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:textStyle="normal|bold"
+        android:background="@color/colorBlack"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false" />
+
+    <cn.bingoogolapple.bgabanner.BGABanner
+        android:id="@+id/banner_content"
+        style="@style/BannerDefaultStyle"
+        app:banner_indicatorGravity="bottom|right"
+        app:banner_transitionEffect="depth"
+        android:layout_width="match_parent"
+        android:background="@android:color/white"
+        android:layout_height="160dp"
+        android:layout_below="@+id/textView23"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/icon_map"
+        android:layout_alignTop="@+id/home_mission"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/home_map" />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/icon_record"
+        android:layout_alignTop="@+id/home_map"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="55dp"
+        android:layout_marginEnd="55dp"
+        android:id="@+id/home_record" />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/icon_mission"
+        android:layout_marginLeft="55dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="28dp"
+        android:id="@+id/home_mission"
+        android:layout_below="@+id/banner_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="任务"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:id="@+id/textView25"
+        android:layout_below="@+id/home_mission"
+        android:layout_alignLeft="@+id/home_mission"
+        android:layout_alignStart="@+id/home_mission"
+        android:textAlignment="center"
+        android:layout_alignRight="@+id/home_mission"
+        android:layout_alignEnd="@+id/home_mission"
+        android:textSize="12sp" />
+
+    <TextView
+        android:text="地图"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView25"
+        android:layout_alignLeft="@+id/home_map"
+        android:layout_alignStart="@+id/home_map"
+        android:id="@+id/textView26"
+        android:textAlignment="center"
+        android:layout_alignRight="@+id/home_map"
+        android:layout_alignEnd="@+id/home_map"
+        android:textSize="12sp" />
+
+    <TextView
+        android:text="上报记录"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView27"
+        android:textAlignment="center"
+        android:layout_alignBaseline="@+id/textView26"
+        android:layout_alignBottom="@+id/textView26"
+        android:layout_alignLeft="@+id/home_record"
+        android:layout_alignStart="@+id/home_record"
+        android:textSize="12sp"
+        android:layout_alignRight="@+id/home_record"
+        android:layout_alignEnd="@+id/home_record" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_below="@+id/home_map"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="34dp"
+        android:id="@+id/textView28"
+        android:layout_height="20dp"
+        android:background="@color/myGray" />
+
+</RelativeLayout>

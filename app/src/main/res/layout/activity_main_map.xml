@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context="com.jiaotang.xunjian01.MainActivity_map">
 
+
+    <com.baidu.mapapi.map.MapView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/bmapView"
+        android:clickable="true"
+        android:layout_above="@+id/button_report">
+
+    </com.baidu.mapapi.map.MapView>
+
     <Button
         android:text="异常上报"
         android:layout_width="191dp"
@@ -27,5 +37,18 @@
         android:layout_toRightOf="@+id/button_report"
         android:layout_toEndOf="@+id/button_report"
         android:textSize="18sp" />
+
+    <Button
+        android:layout_width="33dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="235dp"
+        android:id="@+id/findMe"
+        android:background="@drawable/arrow"
+        android:layout_above="@+id/button_around"
+        android:layout_alignRight="@+id/button_around"
+        android:layout_alignEnd="@+id/button_around"
+        android:layout_marginRight="7dp"
+        android:layout_marginEnd="7dp" />
+
 
 </RelativeLayout>

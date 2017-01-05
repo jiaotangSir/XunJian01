@@ -1,8 +1,6 @@
-package com.jiaotang.xunjian01;
+package com.jiaotang.xunjian01.util;
 
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.jiaotang.xunjian01.mission.MissionCondition;
 

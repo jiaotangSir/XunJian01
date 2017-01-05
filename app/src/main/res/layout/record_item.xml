@@ -38,16 +38,6 @@
         android:layout_alignTop="@+id/textView8" />
 
     <TextView
-        android:text="待处理"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/text_record_completionStatus"
-        android:layout_alignBaseline="@+id/textView6"
-        android:layout_alignBottom="@+id/textView6"
-        android:layout_toRightOf="@+id/textView6"
-        android:layout_toEndOf="@+id/textView6" />
-
-    <TextView
         android:text="XX小区水管泄露"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -56,18 +46,6 @@
         android:layout_alignBottom="@+id/textView2"
         android:layout_toRightOf="@+id/textView2"
         android:layout_toEndOf="@+id/textView2" />
-
-    <TextView
-        android:text="处理情况："
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="58dp"
-        android:layout_marginStart="58dp"
-        android:id="@+id/textView6"
-        android:layout_alignBaseline="@+id/text_record_title"
-        android:layout_alignBottom="@+id/text_record_title"
-        android:layout_toRightOf="@+id/text_record_title"
-        android:layout_toEndOf="@+id/text_record_title" />
 
     <Button
         android:text="详情"
@@ -79,4 +57,28 @@
         android:layout_alignRight="@+id/text_record_completionStatus"
         android:layout_alignEnd="@+id/text_record_completionStatus"
         android:focusable="false"/>
+
+    <TextView
+        android:text="处理情况："
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView6"
+        android:layout_marginRight="14dp"
+        android:layout_marginEnd="14dp"
+        android:layout_alignBaseline="@+id/text_record_title"
+        android:layout_alignBottom="@+id/text_record_title"
+        android:layout_toLeftOf="@+id/text_record_completionStatus"
+        android:layout_toStartOf="@+id/text_record_completionStatus" />
+
+    <TextView
+        android:text="待处理"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_record_completionStatus"
+        android:layout_marginRight="17dp"
+        android:layout_marginEnd="17dp"
+        android:layout_alignBaseline="@+id/textView6"
+        android:layout_alignBottom="@+id/textView6"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

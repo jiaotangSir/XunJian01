@@ -18,6 +18,7 @@ public class MissionUncompletedDetail extends AppCompatActivity {
     private TextView textViewUncompletedDetailId;
     private TextView textViewUncompletedDetailPlace;
     private MissionCondition missionCondition;
+    private Button btnBack;
     private RadioGroup radioGroupResult;
 
     @Override
@@ -28,6 +29,7 @@ public class MissionUncompletedDetail extends AppCompatActivity {
         //编号及区域
         textViewUncompletedDetailId = (TextView) findViewById(R.id.textView_mission_uncompleted_detail_Id);
         textViewUncompletedDetailPlace = (TextView) findViewById(R.id.textView_mission_uncompleted_detail_place);
+        btnBack = (Button) findViewById(R.id.button_mission_uncompleted_detail_back);
         radioGroupResult = (RadioGroup) findViewById(R.id.radioGroup_mission_uncompleted_detail_result);
 
         //取出上个页面发给的数据
@@ -53,6 +55,14 @@ public class MissionUncompletedDetail extends AppCompatActivity {
 //                }
 //            }
 //        });
+
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     public void clickMissionUncompletedDetailSubmit(View v){

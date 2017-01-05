@@ -104,7 +104,8 @@
         android:textSize="14sp"
         android:layout_alignTop="@+id/textView4"
         android:layout_alignLeft="@+id/editText_abnormal_title"
-        android:layout_alignStart="@+id/editText_abnormal_title" />
+        android:layout_alignStart="@+id/editText_abnormal_title"
+        android:editable="false"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -117,7 +118,7 @@
         android:layout_alignBottom="@+id/textView10"
         android:layout_alignLeft="@+id/spinner_abnormal_level"
         android:layout_alignStart="@+id/spinner_abnormal_level"
-        android:hint="点击获取地图中异常位置" />
+        android:textColor="?android:attr/textColorSecondaryInverseNoDisable" />
 
     <TextView
         android:text="图片描述："
@@ -136,7 +137,8 @@
         android:layout_alignTop="@+id/textView12"
         android:layout_alignLeft="@+id/editText_abnormal_place"
         android:layout_alignStart="@+id/editText_abnormal_place"
-        android:id="@+id/imageView_abnormal" />
+        android:id="@+id/imageView_abnormal"
+        />
 
     <Button
         android:text="确认提交"
@@ -148,6 +150,16 @@
         android:id="@+id/button_abnormal_submit"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        />
+        android:onClick="clickCommit" />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@android:color/background_light"
+        android:layout_below="@+id/imageView_abnormal"
+        android:layout_alignLeft="@+id/imageView_abnormal"
+        android:layout_alignStart="@+id/imageView_abnormal"
+        android:layout_marginTop="13dp"
+        android:id="@+id/iv_describe1" />
 
 </RelativeLayout>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">XunJian01</string>
+    <string name="app_name">机电巡检</string>
     <string name="button_mission">我的任务</string>
     <string name="button_map">地图操作</string>
     <string name="button_record">上报记录</string>
