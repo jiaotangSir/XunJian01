@@ -5,7 +5,7 @@
     android:id="@+id/activity_abnormal_record"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jiaotang.xunjian01.AbnormalRecord">
+    tools:context="com.jiaotang.xunjian01.ui.AbnormalRecord">
 
     <TextView
         android:text="异常上报"
@@ -19,7 +19,9 @@
         android:textAlignment="center"
         android:textSize="26sp"
         android:textStyle="normal|bold"
-        android:background="@color/colorPrimary"/>
+        android:background="@color/colorBlack"
+        android:textColor="@color/white"
+        android:gravity="center"/>
 
     <Button
         android:text="返回"
@@ -29,7 +31,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignBottom="@+id/textView_abnormalTitle"
-        android:background="@color/colorPrimary" />
+        android:background="@color/colorBlack"
+        android:textColor="@color/white"/>
 
     <TextView
         android:text="上报标题："
@@ -53,6 +56,7 @@
         android:layout_alignBaseline="@+id/textView7"
         android:layout_alignBottom="@+id/textView7"
         android:layout_toRightOf="@+id/textView7"
+        android:layout_toEndOf="@+id/textView7"
         android:hint="请填写标题"
         android:maxLines="2"/>
 
@@ -161,5 +165,15 @@
         android:layout_alignStart="@+id/imageView_abnormal"
         android:layout_marginTop="13dp"
         android:id="@+id/iv_describe1" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/textView_abnormalTitle"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/expandImage"
+        android:background="@color/graywhite"
+        android:visibility="invisible"/>
 
 </RelativeLayout>

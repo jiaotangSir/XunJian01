@@ -4,10 +4,60 @@
     android:id="@+id/activity_mission_map"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.jiaotang.xunjian01.ui.Activity_missionMap">
+    tools:context="com.jiaotang.xunjian01.ui.MissionMap">
+
+
+    <com.baidu.mapapi.map.MapView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/bmapView1"
+        android:clickable="true"
+        android:layout_above="@+id/button_report1">
+
+    </com.baidu.mapapi.map.MapView>
+
+    <Button
+        android:text="异常上报"
+        android:layout_width="191dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/button_report1"
+        android:textSize="18sp"
+        android:onClick="clickAbnormal1"/>
+
+    <Button
+        android:text="周边设备"
+        android:layout_width="191dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_around1"
+        android:layout_alignBaseline="@+id/button_report1"
+        android:layout_alignBottom="@+id/button_report1"
+        android:layout_toRightOf="@+id/button_report1"
+        android:layout_toEndOf="@+id/button_report1"
+        android:textSize="18sp" />
+
+    <Button
+        android:layout_width="33dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="235dp"
+        android:id="@+id/findMe1"
+        android:background="@drawable/arrow"
+        android:layout_above="@+id/button_around1"
+        android:layout_alignRight="@+id/button_around1"
+        android:layout_alignEnd="@+id/button_around1"
+        android:layout_marginRight="7dp"
+        android:layout_marginEnd="7dp" />
+
+    <Button
+        android:text="结束巡检"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_end"
+        android:layout_above="@+id/button_report1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="clickEnd"/>
 
 </RelativeLayout>

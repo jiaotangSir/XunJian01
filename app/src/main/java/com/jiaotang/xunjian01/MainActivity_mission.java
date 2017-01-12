@@ -10,8 +10,8 @@ import android.os.Bundle;
 import android.view.View;
 
 
-import com.jiaotang.xunjian01.mission.MissionCompletedFragment;
-import com.jiaotang.xunjian01.mission.MissionUncompletedFragment;
+import com.jiaotang.xunjian01.fragment.MissionCompletedFragment;
+import com.jiaotang.xunjian01.fragment.MissionUncompletedFragment;
 
 import java.util.ArrayList;
 

@@ -12,7 +12,7 @@ import android.util.Log;
 public class MySqlHelper extends SQLiteOpenHelper {
 
     //创建“异常上传”表
-    public static final String CREATE_RECORD = " create table Record("
+    private static final String CREATE_RECORD = " create table Record("
             + "id integer primary key autoincrement,"
             + "title text,"
             + "status text,"
@@ -22,8 +22,8 @@ public class MySqlHelper extends SQLiteOpenHelper {
             + "recordLat real,"
             + "recordDate text)";
     //创建“任务信息”表
-    public static final String CREATE_MISSION = " create table Mission("
-            + "missionId integer primary key autoincrement,"
+    private static final String CREATE_MISSION = " create table Mission("
+            + "id integer primary key autoincrement,"
             + "missionPlace text,"
             + "missionStatus text,"
             + "missionDetail text,"

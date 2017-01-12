@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -19,8 +20,6 @@ public class MainActivity extends AppCompatActivity{
 
     private FrameLayout mHomeContent;
     private RadioGroup mHomeRadioGroup;
-    private RadioButton mHomeHomeRb;
-    private RadioButton mHomeMeRb;
     static final int NUM_ITEMS = 2;//一共三个fragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,22 +27,21 @@ public class MainActivity extends AppCompatActivity{
 
         setContentView(R.layout.activity_main);
 
+
         if (getSupportActionBar() != null){
             getSupportActionBar().hide();
         }
 
         //初始化数据
         DataMessage dataMessage = DataMessage.getSingleMessage();
-        dataMessage.initUnmissionData();
+        dataMessage.getUnmissionData();
 
         initView();
     }
 
     protected void initView() {
         mHomeContent = (FrameLayout) findViewById(R.id.content_frame); //tab上方的区域
-        mHomeRadioGroup = (RadioGroup) findViewById(R.id.radiogroup);  //底部的三个tab
-        mHomeHomeRb = (RadioButton) findViewById(R.id.radio_home);
-        mHomeMeRb = (RadioButton) findViewById(R.id.radio_me);
+        mHomeRadioGroup = (RadioGroup) findViewById(R.id.radiogroup);  //底部的四个tab
 
         //监听事件：为底部的RadioGroup绑定状态改变的监听事件
         mHomeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -95,6 +93,7 @@ public class MainActivity extends AppCompatActivity{
                     break;
                 case 1://我
                     fragment = new MeFragment();
+                    //  fragment = new YSHomeFagment();
                     break;
                 default:
                     new HomeFragment();
@@ -104,6 +103,7 @@ public class MainActivity extends AppCompatActivity{
             return fragment;
         }
     };
+
 
 
 }

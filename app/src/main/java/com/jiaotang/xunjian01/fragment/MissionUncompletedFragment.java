@@ -1,7 +1,10 @@
-package com.jiaotang.xunjian01.mission;
+package com.jiaotang.xunjian01.fragment;
 
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,18 +15,26 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.jiaotang.xunjian01.model.MissionCondition;
+import com.jiaotang.xunjian01.adapter.MissionConditionAdapter;
+import com.jiaotang.xunjian01.ui.MissionUncompletedDetail;
 import com.jiaotang.xunjian01.util.DataMessage;
 import com.jiaotang.xunjian01.R;
+import com.jiaotang.xunjian01.util.MySqlHelper;
 import com.jiaotang.xunjian01.util.RefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MissionUncompletedFragment extends Fragment {
 
+    private MissionConditionAdapter missionConditionAdapter;
+    private DataMessage dataMessage;
     //定义待办任务数组unMissionConditionList
     private List<MissionCondition> unMissionConditionList = new ArrayList<>();
     private String[] data = {"1212","33333"};
@@ -41,16 +52,16 @@ public class MissionUncompletedFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mission_uncompleted, container, false);
         //取出dataMessage中的未完成任务的数据
-        DataMessage dataMessage = DataMessage.getSingleMessage();
+        dataMessage = DataMessage.getSingleMessage();
         unMissionConditionList = dataMessage.unMissionConditionList;
 
 
-
 //        重写listView
-        final MissionConditionAdapter missionConditionAdapter = new MissionConditionAdapter(
+        missionConditionAdapter = new MissionConditionAdapter(
                 getContext(),
                 R.layout.mission_completed_item,
                 unMissionConditionList);
+        Log.d("data","数组大小："+unMissionConditionList.size());
         ListView listView = (ListView) view.findViewById(R.id.listView_uncompleted);
         listView.setAdapter(missionConditionAdapter);
 
@@ -68,7 +79,8 @@ public class MissionUncompletedFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("missionCondition", missionCondition);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                intent.putExtra("position", position);
+                startActivityForResult(intent,10);
 
             }
         });
@@ -107,8 +119,9 @@ public class MissionUncompletedFragment extends Fragment {
                             @Override
                             public void run() {
 
-                                MissionCondition mc = new MissionCondition("201622222","通过","北京丰台");
-                                unMissionConditionList.add(mc);
+//                                getUnmissionData();
+//                                MissionCondition mc = new MissionCondition("201622222","通过","北京丰台刷新");
+//                                unMissionConditionList.add(mc);
                             }
                         }).start();
 
@@ -132,8 +145,9 @@ public class MissionUncompletedFragment extends Fragment {
 
                     @Override
                     public void run() {
-                        MissionCondition mc = new MissionCondition("201622222","通过","北京丰台");
-                        unMissionConditionList.add(mc);
+//                        getUnmissionData();
+//                        MissionCondition mc = new MissionCondition("201622222","通过","北京丰台加载");
+//                        unMissionConditionList.add(mc);
                         missionConditionAdapter.notifyDataSetChanged();
                         // 加载完后调用该方法
                         myRefreshListView.setLoading(false);
@@ -149,5 +163,47 @@ public class MissionUncompletedFragment extends Fragment {
     }
 
 
+    public void getUnmissionData() {
 
+        for (int i = 0; i <= 5; i++) {
+            MissionCondition mc = new MissionCondition(String.valueOf(20161001 + i), "待办", "德州某地" + (i + 1));
+            unMissionConditionList.add(mc);
+        }
+//        MySqlHelper helper = new MySqlHelper(getContext(), "Mission", null, 1);
+//        SQLiteDatabase db = helper.getWritableDatabase();
+//        ContentValues values = new ContentValues();
+//
+//        for (MissionCondition mc : unMissionConditionList) {
+//            values.put("missionPlace", mc.getMissionPlace());
+//            values.put("missionStatus", mc.getMissionStatus());
+//            values.put("missionDetail", mc.getMissionDetail());
+//            values.put("missionReason", mc.getMissionReason());
+//            values.put("missionLat", mc.getMissionLat());
+//            values.put("missionLng", mc.getMissionLng());
+//            values.put("createDate", mc.getCreateDate());
+//            values.put("updateDate", mc.getUpdateDate());
+//            db.insert("Mission", null, values);
+//            values.clear();
+//        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 10:
+                if (resultCode == RESULT_OK) {
+                    int position = data.getIntExtra("position", 10000);
+                    if (position != 10000) {
+                        unMissionConditionList.remove(position);
+                        missionConditionAdapter.notifyDataSetChanged();
+                        Log.d("data","数组大小："+unMissionConditionList.size());
+                        Log.d("data", "移除mc");
+                    }
+
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }

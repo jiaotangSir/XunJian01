@@ -1,7 +1,9 @@
-package com.jiaotang.xunjian01.mission;
+package com.jiaotang.xunjian01.fragment;
 
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,6 +14,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.jiaotang.xunjian01.R;
+import com.jiaotang.xunjian01.ui.MissionCompletedDetail;
+import com.jiaotang.xunjian01.model.MissionCondition;
+import com.jiaotang.xunjian01.adapter.MissionConditionAdapter;
+import com.jiaotang.xunjian01.util.MySqlHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,10 +65,24 @@ public class MissionCompletedFragment extends Fragment {
     //        初始化数据，以后是从数据库解析数据
     private void initMissionCondition(){
 
-        MissionCondition missionCondition1 =  new MissionCondition("20161101","已办","德州某地1");
-        missionConditionList.add(missionCondition1);
-        MissionCondition missionCondition2 =  new MissionCondition("20161102","已办","德州某地2");
-        missionConditionList.add(missionCondition2);
+//        MissionCondition missionCondition1 =  new MissionCondition("20161101","已办","德州某地1");
+//        missionConditionList.add(missionCondition1);
+//        MissionCondition missionCondition2 =  new MissionCondition("20161102","已办","德州某地2");
+//        missionConditionList.add(missionCondition2);
+
+        MySqlHelper helper = new MySqlHelper(getContext(), "Mission", null, 1);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        Cursor cursor = db.rawQuery("select * from Mission", null);
+        if (cursor.moveToFirst()) {
+            do {
+                MissionCondition mc = new MissionCondition();
+                int missionId = cursor.getInt(cursor.getColumnIndex("id")) + 20160000;
+                mc.setMissionId(String.valueOf(missionId));
+                mc.setMissionPlace(cursor.getString(cursor.getColumnIndex("missionPlace")));
+                mc.setMissionStatus(cursor.getString(cursor.getColumnIndex("missionStatus")));
+                missionConditionList.add(mc);
+            } while (cursor.moveToNext());
+        }cursor.close();
 
     }
 

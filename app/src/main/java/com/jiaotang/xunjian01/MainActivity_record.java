@@ -14,7 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
-import com.jiaotang.xunjian01.record.RecordCondition;
+import com.jiaotang.xunjian01.model.RecordCondition;
 import com.jiaotang.xunjian01.util.MySqlHelper;
 
 import java.util.ArrayList;

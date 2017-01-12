@@ -1,4 +1,4 @@
-package com.jiaotang.xunjian01.mission;
+package com.jiaotang.xunjian01.model;
 
 import android.widget.Toast;
 
@@ -13,15 +13,15 @@ import cn.bmob.v3.BmobObject;
 public class MissionCondition extends BmobObject implements Serializable{
 
 
-    String missionId;
-    String missionStatus;
-    String missionPlace;
-    String missionDetail;
-    String missionReason;
-    double missionLat;
-    double missionLng;
-    String createDate;
-    String updateDate;
+    private String missionId;
+    private String missionStatus;
+    private String missionPlace;
+    private String missionDetail;
+    private String missionReason;
+    private double missionLat;
+    private double missionLng;
+    private String createDate;
+    private String updateDate;
 
 
     public MissionCondition(){

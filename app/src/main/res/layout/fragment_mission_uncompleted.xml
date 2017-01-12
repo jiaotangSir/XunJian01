@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jiaotang.xunjian01.mission.MissionUncompletedFragment">
+    tools:context="com.jiaotang.xunjian01.fragment.MissionUncompletedFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <com.jiaotang.xunjian01.util.RefreshLayout

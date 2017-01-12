@@ -1,11 +1,12 @@
-package com.jiaotang.xunjian01;
+package com.jiaotang.xunjian01.ui;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -31,6 +32,7 @@ import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.CircleOptions;
 import com.baidu.mapapi.map.InfoWindow;
+import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
@@ -38,16 +40,19 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
-import com.baidu.mapapi.map.PolygonOptions;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.map.Stroke;
 import com.baidu.mapapi.model.LatLng;
-import com.jiaotang.xunjian01.ui.AbnormalRecord;
+import com.jiaotang.xunjian01.MainActivity_map;
+import com.jiaotang.xunjian01.R;
+import com.jiaotang.xunjian01.model.MissionCondition;
+import com.jiaotang.xunjian01.util.MySqlHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity_map extends AppCompatActivity implements CloudListener,BaiduMap.OnMarkerClickListener,BaiduMap.OnMapLongClickListener {
+public class MissionMap extends AppCompatActivity implements CloudListener,BaiduMap.OnMarkerClickListener,BaiduMap.OnMapLongClickListener,BaiduMap.OnMapClickListener{
 
     private LocationManager locationManager;
     private MapView mMapView;
@@ -61,19 +66,20 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
     //长按地图获得的经纬度
     private double recordLat=0.0;
     private double recordLng=0.0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_map);
+        setContentView(R.layout.activity_mission_map);
+
+
 
         /**
          * 获取CloudManager的唯一实例，这句话必须写，否则获取数据是会崩溃
          * 在onDestroy()方法调用时要销毁实例*/
-        CloudManager.getInstance().init(MainActivity_map.this);/**注意：必写*/
-        mMapView = (MapView) findViewById(R.id.bmapView);
-        btnFindMe = (Button) findViewById(R.id.findMe);
-        btnSearchAround = (Button) findViewById(R.id.button_around);
+        CloudManager.getInstance().init(MissionMap.this);/**注意：必写*/
+        mMapView = (MapView) findViewById(R.id.bmapView1);
+        btnFindMe = (Button) findViewById(R.id.findMe1);
+        btnSearchAround = (Button) findViewById(R.id.button_around1);
 
         baiduMap = mMapView.getMap();
         baiduMap.setMyLocationEnabled(true);
@@ -82,7 +88,8 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
         baiduMap.setOnMarkerClickListener(this);
         //实现长按地图响应接口
         baiduMap.setOnMapLongClickListener(this);
-
+        //实现点击地图相应接口
+        baiduMap.setOnMapClickListener(this);
 
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -144,19 +151,29 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
         });
 
 
+
+        //设置假巡查路径假数据，后续会在服务器提供
+        List<LatLng> planPoints = new ArrayList<>();
+        LatLng p1 = new LatLng(39.816,116.166);
+        LatLng p2 = new LatLng(39.817,116.165);
+        LatLng p3 = new LatLng(39.819,116.167);
+        planPoints.add(p1);
+        planPoints.add(p2);
+        planPoints.add(p3);
+        planRoute(planPoints);
     }
 
     /**点击按钮“异常上报”跳转到异常上报页面*/
-    public void clickAbnormal(View v){
+    public void clickAbnormal1(View v){
 
         if ((recordLat != 0.0) & (recordLng != 0.0)){
-            Intent intent = new Intent(MainActivity_map.this,AbnormalRecord.class);
+            Intent intent = new Intent(MissionMap.this,AbnormalRecord.class);
 
             intent.putExtra("lat",recordLat);
             intent.putExtra("lng",recordLng);
             startActivity(intent);
         }else {
-            Toast.makeText(MainActivity_map.this, "跳转失败，请先长按地图获得异常地点经纬度", Toast.LENGTH_LONG).show();
+            Toast.makeText(MissionMap.this, "跳转失败，请先长按地图获得异常地点经纬度", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -174,6 +191,57 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
 
 
 
+    }
+
+    /**结束巡检按钮，点击后结束巡检，记录结束日期时间,将数据写进数据库，并退出地图界面，返回任务列表并刷新数据*/
+    public void clickEnd(View view) {
+        //获取上个页面发来的信息
+        Intent intent1 = getIntent();
+        MissionCondition mc = (MissionCondition) intent1.getSerializableExtra("missionCondition");
+
+        //设置日期格式
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String updateDate = df.format(new java.util.Date());
+
+        //写入数据库
+        MySqlHelper helper = new MySqlHelper(this, "Mission", null, 1);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put("missionPlace", mc.getMissionPlace());
+        values.put("missionStatus", "已办");
+        values.put("createDate", mc.getCreateDate());
+        values.put("updateDate", updateDate);
+        db.insert("Mission", null, values);
+        values.clear();
+
+        //向服务器上传该巡检任务已结束的消息
+
+
+        //退出地图页面,直接返回任务列表
+        Intent intent2 = new Intent();
+        intent2.putExtra("reload", true);
+        setResult(RESULT_OK,intent2);
+        Log.d("data", "退出地图");
+        finish();
+
+    }
+
+
+    /**向地图添加折线表示计划巡查路线*/
+    private void planRoute(List<LatLng> points){
+
+        //画出折线
+        OverlayOptions polyline = new PolylineOptions().points(points).width(8).color(0xAAFF0000);
+        baiduMap.addOverlay(polyline);
+        //在每个折线点设置一个大头针
+        for (LatLng point : points){
+            BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(R.drawable.gcoding_purple);
+            OverlayOptions options = new MarkerOptions().position(point).icon(bitmap);
+            baiduMap.addOverlay(options);
+        }
+
+        Log.d("data", "画出折线和大头针");
     }
 
     /**实现自身定位*/
@@ -257,7 +325,7 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
 
 
 
-/**接口CloudListener的三个方法，云检索功能*/
+    /**接口CloudListener的三个方法，云检索功能*/
     @Override
     public void onGetSearchResult(CloudSearchResult result, int i) {
 
@@ -297,7 +365,7 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
             return false;
         }
 
-        TextView tv = new TextView(MainActivity_map.this);
+        TextView tv = new TextView(MissionMap.this);
         tv.setBackgroundResource(R.drawable.popup);
         tv.setPadding(20,10,20,10);
         tv.setTextColor(Color.WHITE);
@@ -330,4 +398,13 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
 
 
 
+    @Override
+    public void onMapClick(LatLng latLng) {
+        baiduMap.hideInfoWindow();
+    }
+
+    @Override
+    public boolean onMapPoiClick(MapPoi mapPoi) {
+        return false;
+    }
 }

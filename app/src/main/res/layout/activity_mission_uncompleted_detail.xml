@@ -4,7 +4,7 @@
     android:id="@+id/activity_mission_uncompleted_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jiaotang.xunjian01.mission.MissionUncompletedDetail">
+    tools:context="com.jiaotang.xunjian01.ui.MissionUncompletedDetail">
 
     <TextView
         android:text="待办任务详情"
@@ -138,14 +138,16 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button_mission_uncompleted_detail_report"
+        android:id="@+id/btn_start"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:text="提交"
+        android:text="开始巡检"
         android:textSize="18sp"
-        android:onClick="clickMissionUncompletedDetailSubmit"/>
+        android:onClick="clickStart"/>
+
+
 
 </RelativeLayout>

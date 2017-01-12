@@ -1,16 +1,22 @@
-package com.jiaotang.xunjian01.mission;
+package com.jiaotang.xunjian01.ui;
 
 import android.content.Intent;
+import android.icu.text.DateFormat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+
 import com.jiaotang.xunjian01.R;
+import com.jiaotang.xunjian01.model.MissionCondition;
+
+import java.text.SimpleDateFormat;
+
+import static java.text.DateFormat.getDateInstance;
 
 
 public class MissionUncompletedDetail extends AppCompatActivity {
@@ -20,6 +26,10 @@ public class MissionUncompletedDetail extends AppCompatActivity {
     private MissionCondition missionCondition;
     private Button btnBack;
     private RadioGroup radioGroupResult;
+    private boolean isReload = false;
+
+    //上一页面点击listView的position
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +44,11 @@ public class MissionUncompletedDetail extends AppCompatActivity {
 
         //取出上个页面发给的数据
         Intent intent = getIntent();
+        position = intent.getIntExtra("position",10000);
         missionCondition = (MissionCondition) intent.getSerializableExtra("missionCondition");
 //        根据数据显示在页面上
-        textViewUncompletedDetailId.setText(missionCondition.missionId);
-        textViewUncompletedDetailPlace.setText(missionCondition.missionPlace);
+        textViewUncompletedDetailId.setText(missionCondition.getMissionId());
+        textViewUncompletedDetailPlace.setText(missionCondition.getMissionPlace());
 
         //绑定radioGroup的一个匿名监听器
 //        radioGroupResult.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -65,16 +76,41 @@ public class MissionUncompletedDetail extends AppCompatActivity {
         });
     }
 
-    public void clickMissionUncompletedDetailSubmit(View v){
-//        Intent intent = new Intent();
-//        Bundle bundle = new Bundle();
-//
-//        bundle.putSerializable("missionConditionUpdate",missionCondition);
-        finish();
+    /**开始巡检*/
+    public void clickStart(View view) {
 
+        //设置日期格式
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = df.format(new java.util.Date());
+        missionCondition.setCreateDate(date);
+
+        Intent intent = new Intent(this, MissionMap.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("missionCondition", missionCondition);
+        intent.putExtras(bundle);
+        startActivityForResult(intent,11);
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (isReload) {
+            Intent intent = new Intent();
 
+            intent.putExtra("position",position);
+            setResult(RESULT_OK,intent);
+            finish();
+        }
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 11:
+                if (resultCode == RESULT_OK) {
+                    isReload = data.getBooleanExtra("reload", false);
+                }
+        }
+    }
 }

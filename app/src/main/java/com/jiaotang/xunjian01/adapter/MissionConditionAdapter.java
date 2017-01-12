@@ -1,4 +1,4 @@
-package com.jiaotang.xunjian01.mission;
+package com.jiaotang.xunjian01.adapter;
 
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 
 import com.jiaotang.xunjian01.R;
+import com.jiaotang.xunjian01.model.MissionCondition;
 
 import java.util.List;
 /**

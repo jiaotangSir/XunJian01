@@ -1,4 +1,4 @@
-package com.jiaotang.xunjian01;
+package com.jiaotang.xunjian01.ui;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -20,13 +20,17 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.jiaotang.xunjian01.record.RecordCondition;
+import com.jiaotang.xunjian01.R;
+import com.jiaotang.xunjian01.model.RecordCondition;
 import com.jiaotang.xunjian01.util.MySqlHelper;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class AbnormalRecord extends AppCompatActivity {
 
@@ -44,7 +48,10 @@ public class AbnormalRecord extends AppCompatActivity {
     private static final int CROP_PHOTO = 2;
     private ImageView ivControl;
     private ImageView iv1;
+    private ImageView expandImage;
     private Uri imageUri;
+    private File imageFile;
+    private Bitmap newBitmap;
 
     //实例化MySqlHelper
     private MySqlHelper dbHelper;
@@ -58,9 +65,15 @@ public class AbnormalRecord extends AppCompatActivity {
         spinner = (Spinner) findViewById(R.id.spinner_abnormal_level);
         ivControl = (ImageView) findViewById(R.id.imageView_abnormal);
         iv1 = (ImageView) findViewById(R.id.iv_describe1);
+        expandImage = (ImageView) findViewById(R.id.expandImage);
         place = (EditText) findViewById(R.id.editText_abnormal_place);
         title = (EditText) findViewById(R.id.editText_abnormal_title);
         detail = (EditText) findViewById(R.id.editText_abnormal_detail);
+
+        //创建xunImages文件夹来保存要上传的图片
+        String s = Environment.getExternalStorageDirectory().getPath();
+        imageFile = new File(s+File.separator+"xunImages");
+        imageFile.mkdirs();
 
 
         //设置editView不可编辑
@@ -110,20 +123,20 @@ public class AbnormalRecord extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                //获取当前时间，使图片的命名不重复
+                SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+                String dateStr = format.format(new Date());
+
                 //创建output_image.jpg文件，environment.getextrnalStorageDirectory()表示获取当前sd卡根目录，
                 // 由于要对sd卡进行读写操作，需要在配置文件中
                 // 声明权限:<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-                File outputImage = new File(Environment.getExternalStorageDirectory(), "output_image.jpg");
+                File outputImage = new File(imageFile, "output_image"+dateStr+".jpg");
                 try{
-                    if (outputImage.exists()) {
-                        outputImage.delete();
-                        Log.d("data","image文件已存在");
-                    }
                     outputImage.createNewFile();
-                    Log.d("data","创建image文件成功");
+
                 }catch (IOException e){
                     e.printStackTrace();
-                    Log.d("data","创建image文件失败");
+                    Toast.makeText(AbnormalRecord.this,"创建文件失败，请重试。。。",Toast.LENGTH_SHORT).show();
 
                 }
                 //imageUri标识着这个文件的唯一地址
@@ -133,6 +146,22 @@ public class AbnormalRecord extends AppCompatActivity {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 //拍摄完成后可返回结果，进入onActivityResult方法进行处理
                 startActivityForResult(intent,TAKE_PHOTO);
+            }
+        });
+
+        //点击图片放大
+        iv1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expandImage.setImageBitmap(newBitmap);
+                expandImage.setVisibility(View.VISIBLE);
+            }
+        });
+        //点击大图变小
+        expandImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expandImage.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -149,11 +178,11 @@ public class AbnormalRecord extends AppCompatActivity {
 
                     intent.setDataAndType(imageUri, "image/*");
                     intent.putExtra("scale", true);
-                    // 裁剪框的比例，1：1
-                    intent.putExtra("aspectX", 1);
-                    intent.putExtra("aspectY", 1);
+                    // 裁剪框的比例，4:5
+                    intent.putExtra("aspectX", 4);
+                    intent.putExtra("aspectY", 5);
                     // 裁剪后输入图片的尺寸大小
-                    intent.putExtra("outputX", 250);
+                    intent.putExtra("outputX", 200);
                     intent.putExtra("outputY", 250);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                     startActivityForResult(intent,CROP_PHOTO);
@@ -163,7 +192,8 @@ public class AbnormalRecord extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     try{
                         Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
-                        iv1.setImageBitmap(bitmap);
+                        newBitmap = compressImage(bitmap);
+                        iv1.setImageBitmap(newBitmap);
                         Log.d("data","裁剪保存almost成功");
 
                     }catch(FileNotFoundException e){
@@ -216,13 +246,31 @@ public class AbnormalRecord extends AppCompatActivity {
                 finish();
             }
         }
-
-
-
-
-
-
 //        db.execSQL("inset into Record(title,)");
 
+    }
+
+
+
+
+    private Bitmap compressImage(Bitmap image) {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        //质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        int options = 100;
+        //循环判断如果压缩后图片是否大于100kb,大于继续压缩
+        while ( baos.toByteArray().length / 1024>100) {
+            //重置baos即清空baos
+            baos.reset();
+            //这里压缩options%，把压缩后的数据存放到baos中
+            image.compress(Bitmap.CompressFormat.JPEG, options, baos);
+            options -= 10;//每次都减少10
+        }
+        //把压缩后的数据baos存放到ByteArrayInputStream中
+        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());
+        //把ByteArrayInputStream数据生成图片
+        Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);
+        return bitmap;
     }
 }
