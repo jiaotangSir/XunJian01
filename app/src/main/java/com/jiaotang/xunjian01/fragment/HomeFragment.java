@@ -52,9 +52,9 @@ public class HomeFragment extends Fragment {
         ivRecord = (ImageView) view.findViewById(R.id.home_record);
 
         //添加轮播图片
-        views.add(BGABannerUtil.getItemImageView(getActivity(), R.drawable.login_xun));
-        views.add(BGABannerUtil.getItemImageView(getActivity(), R.drawable.test1));
-        views.add(BGABannerUtil.getItemImageView(getActivity(), R.drawable.test2));
+        views.add(BGABannerUtil.getItemImageView(getActivity(), R.mipmap.person_bg));
+        views.add(BGABannerUtil.getItemImageView(getActivity(), R.mipmap.person_bg));
+        views.add(BGABannerUtil.getItemImageView(getActivity(), R.mipmap.person_bg));
         //添加轮播文案
         List<String> tips = new ArrayList<String>();
         tips.add("欢迎来到巡检中心");

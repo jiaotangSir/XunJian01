@@ -29,7 +29,7 @@ public class MeFragment extends Fragment {
 
 
 
-    //重写setMenuVisibility方法，不然会出现叠层的现象
+    /**重写setMenuVisibility方法，不然两个fragment会出现叠层的现象*/
     @Override
     public void setMenuVisibility(boolean menuVisibile) {
         super.setMenuVisibility(menuVisibile);

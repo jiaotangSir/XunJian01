@@ -152,7 +152,7 @@ public class MissionMap extends AppCompatActivity implements CloudListener,Baidu
 
 
 
-        //设置假巡查路径假数据，后续会在服务器提供
+        /**设置假巡查路径假数据，后续会在服务器提供*/
         List<LatLng> planPoints = new ArrayList<>();
         LatLng p1 = new LatLng(39.816,116.166);
         LatLng p2 = new LatLng(39.817,116.165);
@@ -160,6 +160,7 @@ public class MissionMap extends AppCompatActivity implements CloudListener,Baidu
         planPoints.add(p1);
         planPoints.add(p2);
         planPoints.add(p3);
+        //调用自定义的方法，显示折线和折点。
         planRoute(planPoints);
     }
 

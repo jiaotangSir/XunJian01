@@ -43,7 +43,7 @@
     <color name="divider_color">#B6B6B6</color>
     <color name="text_color">#FFFFFF</color>
     <color name="back_ground_color">#fcfcfc</color>
-    <color name="transparent">#0000</color>
+    <color name="transparent">#00000000</color>
 
     <color name="user_icon_1">#ff00bcd4</color><!-- cyan 500 -->
     <color name="user_icon_2">#ff3f51b5</color><!-- indigo 500 -->
