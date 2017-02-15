@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolygonOptions;
+import com.baidu.mapapi.map.Polyline;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.map.Stroke;
 import com.baidu.mapapi.model.LatLng;
@@ -62,6 +64,19 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
     private double recordLat=0.0;
     private double recordLng=0.0;
 
+    /**图层控制相关*/
+    private View legendLayout;
+    private boolean isShowLegend = false;//显示图例控制
+    private List<Polyline> polylineList1 = new ArrayList<>();
+    private List<Marker> markerList1 = new ArrayList<>();
+    private List<Polyline> polylineList2 = new ArrayList<>();
+    private List<Marker> markerList2 = new ArrayList<>();
+    private List<Polyline> polylineList3 = new ArrayList<>();
+    private List<Marker> markerList3 = new ArrayList<>();
+    private boolean isShowRoute1 = false;//显示图例1的管线或路线
+    private boolean isShowRoute2 = false;//显示图例2的管线或路线
+    private boolean isShowRoute3 = false;//显示图例3的管线或路线
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +89,8 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
         mMapView = (MapView) findViewById(R.id.bmapView);
         btnFindMe = (Button) findViewById(R.id.findMe);
         btnSearchAround = (Button) findViewById(R.id.button_around);
+        legendLayout = findViewById(R.id.legendLayout);
+        legendLayout.setVisibility(View.INVISIBLE);
 
         baiduMap = mMapView.getMap();
         baiduMap.setMyLocationEnabled(true);
@@ -123,7 +140,7 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
             }
         });
 
-        //点击查询周边
+        /**点击查询周边*/
         btnSearchAround.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -145,6 +162,8 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
 
 
     }
+
+
 
     /**点击按钮“异常上报”跳转到异常上报页面*/
     public void clickAbnormal(View v){
@@ -192,6 +211,182 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
         MyLocationData locationData = builder.build();
         baiduMap.setMyLocationData(locationData);
     }
+
+    /**点击出现图例控制*/
+    public void showLegend(View v) {
+
+        if (!isShowLegend) {
+            legendLayout.setVisibility(View.VISIBLE);
+            isShowLegend = true;
+
+        }else {
+            legendLayout.setVisibility(View.INVISIBLE);
+            isShowLegend = false;
+        }
+    }
+    /**点击图例显示相关管线*/
+    public void clickCheckBox(View v) {
+        switch ( v.getId()) {
+            case R.id.legend1://显示第一个图例
+
+                if (((CheckBox) v).isChecked()) {
+                    if (isShowRoute1){
+                        for (Polyline polyline : polylineList1) {
+                            polyline.setVisible(true);
+                        }
+                        for (Marker marker : markerList1) {
+                            marker.setVisible(true);
+                        }
+                    }else {
+                        Log.d("data", ((CheckBox) v).getText().toString() + "被选中了");
+                        //从网络获取管线数据或路径等位置信息，现在为模拟数据
+                        List<LatLng> planPoints = new ArrayList<>();
+                        LatLng p1 = new LatLng(39.816,116.166);
+                        LatLng p2 = new LatLng(39.817,116.165);
+                        LatLng p3 = new LatLng(39.819,116.167);
+                        LatLng p4 = new LatLng(39.819,116.168);
+                        planPoints.add(p1);
+                        planPoints.add(p2);
+                        planPoints.add(p3);
+                        planPoints.add(p4);
+                        //调用自定义的方法，显示折线和折点。
+                        //画出折线
+                        OverlayOptions polyline = new PolylineOptions().points(planPoints).width(8).color(0xAA00CED1);
+                        Polyline myPolyline = (Polyline) baiduMap.addOverlay(polyline);
+                        polylineList1.add(myPolyline);
+                        //在每个折线点设置一个大头针
+                        for (LatLng point : planPoints){
+                            BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(R.drawable.gcoding_purple);
+                            OverlayOptions options = new MarkerOptions().position(point).icon(bitmap);
+                            Marker myMarker = (Marker) baiduMap.addOverlay(options);
+                            markerList1.add(myMarker);
+                        }
+                        isShowRoute1 = true;
+                    }
+                } else {
+                    Log.d("data", ((CheckBox) v).getText().toString() + "取消选中");
+                    for (Polyline polyline : polylineList1) {
+                        polyline.setVisible(false);
+                    }
+                    for (Marker marker : markerList1) {
+                        marker.setVisible(false);
+                    }
+                }
+                break;
+            case R.id.legend2://显示第二个图例
+                if (((CheckBox) v).isChecked()) {
+                    Log.d("data", ((CheckBox) v).getText().toString() + "被选中了");
+                    if (isShowRoute2){
+                        for (Polyline polyline : polylineList2) {
+                            polyline.setVisible(true);
+                        }
+                        for (Marker marker : markerList2) {
+                            marker.setVisible(true);
+                        }
+                    }else {
+                        Log.d("data", ((CheckBox) v).getText().toString() + "被选中了");
+                        //从网络获取管线数据或路径等位置信息，现在为模拟数据
+                        List<LatLng> planPoints = new ArrayList<>();
+                        LatLng p1 = new LatLng(39.806,116.166);
+                        LatLng p2 = new LatLng(39.807,116.165);
+                        LatLng p3 = new LatLng(39.809,116.167);
+                        LatLng p4 = new LatLng(39.809,116.168);
+                        planPoints.add(p1);
+                        planPoints.add(p2);
+                        planPoints.add(p3);
+                        planPoints.add(p4);
+                        //调用自定义的方法，显示折线和折点。
+                        //画出折线
+                        OverlayOptions polyline = new PolylineOptions().points(planPoints).width(8).color(0xAAFFD700);
+                        Polyline myPolyline = (Polyline) baiduMap.addOverlay(polyline);
+                        polylineList2.add(myPolyline);
+                        //在每个折线点设置一个大头针
+                        for (LatLng point : planPoints){
+                            BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(R.drawable.gcoding_purple);
+                            OverlayOptions options = new MarkerOptions().position(point).icon(bitmap);
+                            Marker myMarker = (Marker) baiduMap.addOverlay(options);
+                            markerList2.add(myMarker);
+                        }
+                        isShowRoute2 = true;
+                    }
+                } else {
+                    Log.d("data", ((CheckBox) v).getText().toString() + "取消选中");
+                    for (Polyline polyline : polylineList2) {
+                        polyline.setVisible(false);
+                    }
+                    for (Marker marker : markerList2) {
+                        marker.setVisible(false);
+                    }
+                }
+                break;
+            case R.id.legend3://显示第三个图例
+                if (((CheckBox) v).isChecked()) {
+                    Log.d("data", ((CheckBox) v).getText().toString() + "被选中了");
+                    if (isShowRoute3){
+                        for (Polyline polyline : polylineList3) {
+                            polyline.setVisible(true);
+                        }
+                        for (Marker marker : markerList3) {
+                            marker.setVisible(true);
+                        }
+                    }else {
+                        Log.d("data", ((CheckBox) v).getText().toString() + "被选中了");
+                        //从网络获取管线数据或路径等位置信息，现在为模拟数据
+                        List<LatLng> planPoints = new ArrayList<>();
+                        LatLng p1 = new LatLng(39.816,116.176);
+                        LatLng p2 = new LatLng(39.817,116.175);
+                        LatLng p3 = new LatLng(39.819,116.177);
+                        LatLng p4 = new LatLng(39.819,116.178);
+                        planPoints.add(p1);
+                        planPoints.add(p2);
+                        planPoints.add(p3);
+                        planPoints.add(p4);
+                        //调用自定义的方法，显示折线和折点。
+                        //画出折线
+                        OverlayOptions polyline = new PolylineOptions().points(planPoints).width(8).color(0xAAFF7F50);
+                        Polyline myPolyline = (Polyline) baiduMap.addOverlay(polyline);
+                        polylineList3.add(myPolyline);
+                        //在每个折线点设置一个大头针
+                        for (LatLng point : planPoints){
+                            BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(R.drawable.gcoding_purple);
+                            OverlayOptions options = new MarkerOptions().position(point).icon(bitmap);
+                            Marker myMarker = (Marker) baiduMap.addOverlay(options);
+                            markerList3.add(myMarker);
+                        }
+                        isShowRoute3 = false;
+                    }
+                } else {
+                    Log.d("data", ((CheckBox) v).getText().toString() + "取消选中");
+                    for (Polyline polyline : polylineList3) {
+                        polyline.setVisible(false);
+                    }
+                    for (Marker marker : markerList3) {
+                        marker.setVisible(false);
+                    }
+                }
+                break;
+            default:
+                break;
+
+        }
+    }
+
+    /**向地图添加折线表示管线位置或计划巡查路线*/
+    private void planRoute(List<LatLng> points,int myColor){
+
+        //画出折线
+        OverlayOptions polyline = new PolylineOptions().points(points).width(8).color(myColor);
+        baiduMap.addOverlay(polyline);
+        //在每个折线点设置一个大头针
+        for (LatLng point : points){
+            BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(R.drawable.gcoding_purple);
+            OverlayOptions options = new MarkerOptions().position(point).icon(bitmap);
+            baiduMap.addOverlay(options);
+        }
+
+        Log.d("data", "画出折线和大头针");
+    }
+
 
     /**接口locationListener，实现实时监听位置变化*/
     LocationListener locationListener = new LocationListener() {
@@ -326,6 +521,9 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
         marker.setTitle(String.valueOf(latLng.latitude)+","+String.valueOf(latLng.longitude));
         Log.d("data","长按地图title："+String.valueOf(latLng.latitude)+","+String.valueOf(latLng.longitude));
 
+        isShowRoute1 = false;
+        isShowRoute2 = false;
+        isShowRoute3 = false;
     }
 
 
