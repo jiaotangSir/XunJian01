@@ -3,6 +3,8 @@
     <!--自定义黑色-->
     <color name="colorBlack">#FF373333</color>
 
+    <color name="darker_gray">#aaa</color>
+
     <!--FFE2E2E2-->
     <color name="myGray">#FFE2E2E2</color>
     <!-- 常用颜色值 -->

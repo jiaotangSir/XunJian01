@@ -1,0 +1,83 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.jiaotang.xunjian01.fragment.CityListFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_marginLeft="2dp"
+        android:background="#f0f3f5"
+        android:gravity="center_vertical"
+        android:text="当前位置"
+        android:textColor="@color/darker_gray"
+        android:textSize="16sp" />
+
+    <RelativeLayout
+        android:id="@+id/current_item"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <TextView
+            android:id="@+id/current_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:text="定位中..."
+            android:textColor="@color/darker_gray"
+            android:textSize="16sp"/>
+
+
+        <TextView
+            android:id="@+id/current_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="12dp"
+            android:text="--"
+            android:textColor="@color/darker_gray"/>
+
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_marginLeft="2dp"
+        android:background="#f0f3f5"
+        android:gravity="center_vertical"
+        android:text="热门城市"
+        android:textColor="@color/darker_gray"
+        android:textSize="16sp"/>
+    <ListView
+        android:id="@+id/hotcitylist"
+        android:layout_width="fill_parent"
+        android:layout_height="200dip"
+        android:cacheColorHint="#00000000"
+        android:divider="#cccccc"
+        android:dividerHeight="0.5dp"
+        android:listSelector="#f0f3f5"
+        android:scrollingCache="false"/>
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="32dp"
+        android:layout_marginLeft="2dp"
+        android:background="#f0f3f5"
+        android:gravity="center_vertical"
+        android:text="全国"
+        android:textColor="@color/darker_gray"
+        android:textSize="16sp"/>
+
+    <ExpandableListView
+        android:id="@+id/myExpandable"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:childDivider="@color/darker_gray"
+        android:divider="#cccccc"
+        android:dividerHeight="1dp" />
+
+
+</LinearLayout>

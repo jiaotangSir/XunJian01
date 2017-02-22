@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_offline"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.jiaotang.xunjian01.ui.OfflineActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background = "@color/colorAccent">
+
+        <ImageButton
+            android:id="@+id/back"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10.0dip"
+            android:background="@drawable/popup"
+            android:contentDescription="回来"
+            android:paddingRight="8.0dip">
+
+        </ImageButton>
+        <LinearLayout
+            android:id="@+id/city_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/popup"
+            android:orientation="horizontal"
+            android:padding="1dp">
+            <Button
+                android:id="@+id/clButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/popup"
+                android:padding="8dp"
+                android:text="城市列表"
+                android:textColor="#4196fd">
+
+            </Button>
+
+            <Button
+                android:id="@+id/localButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/popup"
+                android:padding="8dp"
+                android:text="下载管理"
+                android:textColor="@color/darker_gray">
+            </Button>
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/offlineVP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v4.view.ViewPager>
+</LinearLayout>

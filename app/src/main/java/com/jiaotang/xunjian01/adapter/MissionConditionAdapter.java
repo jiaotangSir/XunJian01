@@ -1,6 +1,7 @@
 package com.jiaotang.xunjian01.adapter;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
 import android.content.Context;
@@ -41,9 +42,12 @@ public class MissionConditionAdapter extends ArrayAdapter<MissionCondition> {
         TextView missionId = (TextView) view.findViewById(R.id.textView_missionId);
         TextView missionCompletionStatus = (TextView) view.findViewById(R.id.textView_missionCompletionStatus);
         TextView missionPlace = (TextView) view.findViewById(R.id.textView_missionPlace);
-        missionId.setText(missionCondition.getMissionId());
-        missionPlace.setText(missionCondition.getMissionPlace());
-        missionCompletionStatus.setText(missionCondition.getMissionStatus());
+
+        if (missionCondition != null) {
+            missionId.setText(missionCondition.getMissionId());
+            missionPlace.setText(missionCondition.getMissionPlace());
+            missionCompletionStatus.setText(missionCondition.getMissionStatus());
+        }
 
         return view;
     }

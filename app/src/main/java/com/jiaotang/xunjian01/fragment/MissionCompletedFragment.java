@@ -28,6 +28,9 @@ import java.util.List;
 public class MissionCompletedFragment extends Fragment {
 
     private List<MissionCondition> missionConditionList = new ArrayList<MissionCondition>();
+
+    private MissionConditionAdapter missionConditionAdapter;
+
     public MissionCompletedFragment() {
         // Required empty public constructor
     }
@@ -43,7 +46,7 @@ public class MissionCompletedFragment extends Fragment {
 //        加载布局layout_main_mission_completed
         View view = inflater.inflate(R.layout.fragment_mission_completed, container, false);
 //        重写listView
-        MissionConditionAdapter missionConditionAdapter = new MissionConditionAdapter(getContext(),
+        missionConditionAdapter = new MissionConditionAdapter(getContext(),
                 R.layout.mission_completed_item,missionConditionList);
         ListView listView = (ListView) view.findViewById(R.id.listView_completed);
         listView.setAdapter(missionConditionAdapter);
@@ -57,7 +60,18 @@ public class MissionCompletedFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+
         return view;
+
+
+    }
+
+    /**刷新列表数据*/
+    public void refreshCompletedData(){
+        missionConditionList.clear();
+        initMissionCondition();
+        missionConditionAdapter.notifyDataSetChanged();
 
 
     }

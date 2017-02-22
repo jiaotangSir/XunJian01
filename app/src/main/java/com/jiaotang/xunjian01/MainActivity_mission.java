@@ -23,6 +23,8 @@ public class MainActivity_mission extends AppCompatActivity {
     private ViewPager viewPager;
     private ArrayList<Fragment> mFragmentList=new ArrayList<>();
     private SectionsPagerAdapter mSectionsPagerAdapter;
+
+    private MissionCompletedFragment missionCompletedFragment = new MissionCompletedFragment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +35,7 @@ public class MainActivity_mission extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewPager_mission);
 //
         mFragmentList.add(new MissionUncompletedFragment());
-        mFragmentList.add(new MissionCompletedFragment());
+        mFragmentList.add(missionCompletedFragment);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         viewPager.setAdapter(mSectionsPagerAdapter);
@@ -45,6 +47,10 @@ public class MainActivity_mission extends AppCompatActivity {
         finish();
     }
 
+    //调用MissionCompletedFragment的方法，刷新已办任务列表数据
+    public void refreshCompletedData(){
+        missionCompletedFragment.refreshCompletedData();
+    }
 
 
 

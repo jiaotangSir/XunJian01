@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity{
                 //通过fragments这个adapter还有index来替换帧布局中的内容
                 Fragment fragment = (Fragment) fragments.instantiateItem(mHomeContent, index);
                 //一开始将帧布局中 的内容设置为第一个
+
                 fragments.setPrimaryItem(mHomeContent, 0, fragment);
                 fragments.finishUpdate(mHomeContent);
 
@@ -66,8 +67,8 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-    //第一次启动时，我们让mHomeHomeRb这个radiobutton处于选中状态。
-    // 当然了，在这之前，先要在布局文件中设置其他的某一个radiobutton（只要不是mHomeHomeRb就行）
+    //第一次启动时，我们让mHomeHomeRb这个radioButton处于选中状态。
+    // 当然了，在这之前，先要在布局文件中设置其他的某一个radioButton（只要不是mHomeHomeRb就行）
     // 的属性为android:checked="true"，才会出发下面的这个check方法切换到mHomeHomeRb
     @Override
     protected void onStart() {
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity{
 
         @Override
         public int getCount() {
-            return NUM_ITEMS;//一共有四个Fragment
+            return NUM_ITEMS;//一共有三个个Fragment
         }
 
         //进行Fragment的初始化
@@ -90,13 +91,16 @@ public class MainActivity extends AppCompatActivity{
             switch (i) {
                 case 0://首页
                     fragment = new HomeFragment();
+                    Log.d("data","第一个fragment");
                     break;
                 case 1://我
                     fragment = new MeFragment();
+                    Log.d("data","第二个fragment");
                     //  fragment = new YSHomeFagment();
                     break;
                 default:
                     new HomeFragment();
+                    Log.d("data","第三个fragment");
                     break;
             }
 

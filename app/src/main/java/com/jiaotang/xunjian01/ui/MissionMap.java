@@ -30,6 +30,7 @@ import com.baidu.mapapi.cloud.NearbySearchInfo;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.Circle;
 import com.baidu.mapapi.map.CircleOptions;
 import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.MapPoi;
@@ -52,7 +53,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MissionMap extends AppCompatActivity implements CloudListener,BaiduMap.OnMarkerClickListener,BaiduMap.OnMapLongClickListener,BaiduMap.OnMapClickListener{
+public class MissionMap extends AppCompatActivity implements CloudListener,
+        BaiduMap.OnMarkerClickListener,BaiduMap.OnMapLongClickListener,BaiduMap.OnMapClickListener{
 
     private LocationManager locationManager;
     private MapView mMapView;
@@ -62,6 +64,11 @@ public class MissionMap extends AppCompatActivity implements CloudListener,Baidu
     private Button btnFindMe;
     private Location location;
     private Button btnSearchAround;
+
+    /**覆盖物...*/
+    private Circle aroundCircle = null;//y圆形周边覆盖物
+    private List<Marker> aroundMarkerList = new ArrayList<>();//周边设备MarkerList
+
 
     //长按地图获得的经纬度
     private double recordLat=0.0;
@@ -134,7 +141,19 @@ public class MissionMap extends AppCompatActivity implements CloudListener,Baidu
         btnSearchAround.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                baiduMap.clear();
+                /**查询前先清除以前的覆盖物*/
+                if (aroundCircle != null){
+                    aroundCircle.remove();
+                    Log.d("data","清除周边Circle");
+                }
+                if (aroundMarkerList.size() != 0){
+                    for (Marker m : aroundMarkerList) {
+                        m.remove();
+
+                    }
+                    Log.d("data","清除周边marker");
+                }
+                baiduMap.hideInfoWindow();//隐藏信息框
 
                 getAround();
 
@@ -144,7 +163,7 @@ public class MissionMap extends AppCompatActivity implements CloudListener,Baidu
                 OverlayOptions ooCircle = new CircleOptions().fillColor( 0xCCCCCC00 )
                         .center(center).stroke(new Stroke(5, 0xFFFF00FF ))
                         .radius(3000);
-                baiduMap.addOverlay(ooCircle);
+                aroundCircle = (Circle) baiduMap.addOverlay(ooCircle);
 
 
             }
@@ -341,7 +360,7 @@ public class MissionMap extends AppCompatActivity implements CloudListener,Baidu
                 OverlayOptions oo = new MarkerOptions().icon(bd).position(ll);
                 Marker marker = (Marker)baiduMap.addOverlay(oo);
                 marker.setTitle(info.title);
-
+                aroundMarkerList.add(marker);
             }
 
         }

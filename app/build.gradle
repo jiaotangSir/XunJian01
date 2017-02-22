@@ -29,12 +29,11 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile files('libs/baidumapapi_base_v4_1_1.jar')
+
+//    compile 'com.android.support:support-v4:25.0.0'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:25.0.0'
     compile 'com.android.support:support-v4:24.2.1'
-
-
-//    compile 'com.android.support:support-v4:25.0.0'
     compile 'cn.bingoogolapple:bga-banner:2.1.5@aar'
     testCompile 'junit:junit:4.12'
 }

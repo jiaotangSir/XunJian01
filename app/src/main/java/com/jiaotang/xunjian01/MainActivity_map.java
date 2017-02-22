@@ -30,14 +30,17 @@ import com.baidu.mapapi.cloud.NearbySearchInfo;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.Circle;
 import com.baidu.mapapi.map.CircleOptions;
 import com.baidu.mapapi.map.InfoWindow;
+import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolygonOptions;
 import com.baidu.mapapi.map.Polyline;
@@ -49,7 +52,8 @@ import com.jiaotang.xunjian01.ui.AbnormalRecord;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity_map extends AppCompatActivity implements CloudListener,BaiduMap.OnMarkerClickListener,BaiduMap.OnMapLongClickListener {
+public class MainActivity_map extends AppCompatActivity implements CloudListener,
+        BaiduMap.OnMarkerClickListener,BaiduMap.OnMapLongClickListener,BaiduMap.OnMapClickListener {
 
     private LocationManager locationManager;
     private MapView mMapView;
@@ -77,6 +81,11 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
     private boolean isShowRoute2 = false;//显示图例2的管线或路线
     private boolean isShowRoute3 = false;//显示图例3的管线或路线
 
+    /**覆盖物...*/
+    private Marker abnormalMarker = null;//异常上报Marker
+    private List<Marker> aroundMarkerList = new ArrayList<>();//周边设备MarkerList
+    private Circle aroundCircle = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +108,8 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
         baiduMap.setOnMarkerClickListener(this);
         //实现长按地图响应接口
         baiduMap.setOnMapLongClickListener(this);
-
+        //实现点击地图响应接口
+        baiduMap.setOnMapClickListener(this);
 
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -144,18 +154,31 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
         btnSearchAround.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                baiduMap.clear();
 
+                /**查询前先清除以前的覆盖物*/
+                if (aroundCircle != null){
+                    aroundCircle.remove();
+                    Log.d("data","清除周边Circle");
+                }
+                if (aroundMarkerList.size() != 0){
+                    for (Marker m : aroundMarkerList) {
+                        m.remove();
+
+                    }
+                    Log.d("data","清除周边marker");
+                }
+                baiduMap.hideInfoWindow();//隐藏信息框
+
+
+                /**获得周边所有设备*/
                 getAround();
 
                 //对周边检索的范围进行绘制
-
                 LatLng center = new LatLng(location.getLatitude(), location.getLongitude());
-                OverlayOptions ooCircle = new CircleOptions().fillColor( 0xCCCCCC00 )
-                        .center(center).stroke(new Stroke(5, 0xFFFF00FF ))
+                OverlayOptions ooCircle = new CircleOptions().fillColor( 0x66CCCC00 )
+                        .center(center).stroke(new Stroke(5, 0xCCFF00FF ))
                         .radius(3000);
-                baiduMap.addOverlay(ooCircle);
-
+                aroundCircle = (Circle) baiduMap.addOverlay(ooCircle);
 
             }
         });
@@ -185,10 +208,10 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
         NearbySearchInfo info = new NearbySearchInfo();
         info.ak = "7uXuGG77barvr7lhL15KzTIUABmlmtef";
         info.geoTableId = 159344;
-        info.radius = 30000;
+        info.radius = 3000;
 //        String s = String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude());
 
-        info.location = "116.167727,39.815400";
+        info.location = location.getLongitude()+","+location.getLatitude();
         CloudManager.getInstance().nearbySearch(info);
 
 
@@ -226,6 +249,7 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
     }
     /**点击图例显示相关管线*/
     public void clickCheckBox(View v) {
+        baiduMap.hideInfoWindow();//隐藏信息框
         switch ( v.getId()) {
             case R.id.legend1://显示第一个图例
 
@@ -259,6 +283,7 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
                             BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(R.drawable.gcoding_purple);
                             OverlayOptions options = new MarkerOptions().position(point).icon(bitmap);
                             Marker myMarker = (Marker) baiduMap.addOverlay(options);
+                            myMarker.setTitle(point.latitude+","+point.longitude);
                             markerList1.add(myMarker);
                         }
                         isShowRoute1 = true;
@@ -467,6 +492,7 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
                 OverlayOptions oo = new MarkerOptions().icon(bd).position(ll);
                 Marker marker = (Marker)baiduMap.addOverlay(oo);
                 marker.setTitle(info.title);
+                aroundMarkerList.add(marker);
 
             }
 
@@ -511,14 +537,19 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
     @Override
     public void onMapLongClick(LatLng latLng) {
 
-        baiduMap.clear();
+        //先清除之前的异常点
+        if (abnormalMarker != null) {
+            abnormalMarker.remove();
+        }
+
+
         recordLat = latLng.latitude;
         recordLng = latLng.longitude;
 
         BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(R.drawable.icon_gcoding);
         OverlayOptions oo = new MarkerOptions().icon(bd).position(latLng);
-        Marker marker = (Marker)baiduMap.addOverlay(oo);
-        marker.setTitle(String.valueOf(latLng.latitude)+","+String.valueOf(latLng.longitude));
+        abnormalMarker = (Marker)baiduMap.addOverlay(oo);
+        abnormalMarker.setTitle(String.valueOf(latLng.latitude)+","+String.valueOf(latLng.longitude));
         Log.d("data","长按地图title："+String.valueOf(latLng.latitude)+","+String.valueOf(latLng.longitude));
 
         isShowRoute1 = false;
@@ -527,5 +558,15 @@ public class MainActivity_map extends AppCompatActivity implements CloudListener
     }
 
 
+    /**点击地图空白处接口方法  OnMapClickListener*/
+    @Override
+    public void onMapClick(LatLng latLng) {
+        baiduMap.hideInfoWindow();
+        Log.d("data","点击空白处取消弹出窗口");
+    }
 
+    @Override
+    public boolean onMapPoiClick(MapPoi mapPoi) {
+        return false;
+    }
 }

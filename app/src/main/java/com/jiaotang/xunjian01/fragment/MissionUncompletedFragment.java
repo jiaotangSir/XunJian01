@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.jiaotang.xunjian01.MainActivity_mission;
 import com.jiaotang.xunjian01.model.MissionCondition;
 import com.jiaotang.xunjian01.adapter.MissionConditionAdapter;
 import com.jiaotang.xunjian01.ui.MissionUncompletedDetail;
@@ -197,7 +198,11 @@ public class MissionUncompletedFragment extends Fragment {
                         unMissionConditionList.remove(position);
                         missionConditionAdapter.notifyDataSetChanged();
                         Log.d("data","数组大小："+unMissionConditionList.size());
-                        Log.d("data", "移除mc");
+                        Log.d("data", "移除mc"+position);
+
+                        //刷新已办任务列表
+                        MainActivity_mission mainActivity_mission = (MainActivity_mission) getActivity();
+                        mainActivity_mission.refreshCompletedData();
                     }
 
                 }
